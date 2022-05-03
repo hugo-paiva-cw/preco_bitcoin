@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:preco_bitcoin/services/http_service.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,18 +9,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  static const _apiUrl = 'https://blockchain.info/ticker';
+  HttpService httpService = HttpService();
   var _btcBuyPrice = 'R\$ 0';
 
   void _getBtcPrice() async {
-    var uri = Uri.parse(_apiUrl);
-
-    http.Response response;
-    response = await http.get(uri);
-    Map<String, dynamic> object = json.decode(response.body);
-
+    _btcBuyPrice = await httpService.getPrice(currency: 'BRL');
     setState(() {
-      _btcBuyPrice = 'R\$ ' + object['BRL']['buy'].toString();
+      _btcBuyPrice;
     });
   }
 
